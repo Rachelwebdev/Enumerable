@@ -1,53 +1,24 @@
-module MyEnumerable
-  def my_all?
-    my_each { |item| return false unless yield(item) }
-    true
-  end
+require_relative 'my_list'
 
-  def my_any?
-    my_each { |item| return true if yield(item) }
-    false
-  end
+list = MyList.new(1, 2, 3, 4)
 
-  def my_filter
-    result = []
-    my_each { |item| result << item if yield(item) }
-    result
-  end
-
-  def my_each(&block)
-    raise NotImplementedError, "You must implement the 'my_each' method"
-  end
-end
-
-class MyList
-  include MyEnumerable
-
-  def initialize
-    @list = []
-  end
-
-  def each(&block)
-    @list.each(&block)
-  end
-
-  def <<(item)
-    @list << item
-  end
-
-  def my_each(&block)
-    @list.each(&block)
-  end
-end
-
-list = MyList.new
-list << 1
-list << 2
-list << 3
-list << 4
-
+# Test #all?
 puts(list.my_all? { |e| e < 5 })
 puts(list.my_all? { |e| e > 5 })
+
+# Test #any?
 puts(list.my_any? { |e| e == 2 })
 puts(list.my_any? { |e| e == 5 })
+
+# Test #filter
+puts(list.my_filter(&:even?))
+
+
+require_relative 'my_array'
+
+array = MyArray.new([1, 2, 3])
+
+puts array.my_all? { |item| item > 0 } 
+puts array.my_any? { |item| item == 4 } 
+puts array.my_filter { |item| item > 1 } 
 puts(list.my_filter(&:even?))
